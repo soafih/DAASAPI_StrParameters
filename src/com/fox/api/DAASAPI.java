@@ -55,7 +55,15 @@ public class DAASAPI {
 			JSONObject rootObj = new JSONObject();
 			JSONObject respObj = new JSONObject();
 
-			respObj.put("result", "success");
+			if (buildURL.equals("URI not found")) {
+				respObj.put("result", "Queued");
+
+			} else {
+				respObj.put("result", "success");
+				
+			}
+			respObj.put("app_ep", "https://" + request.getApplicationName().toLowerCase()
+					+ ".10.135.4.49.xip.io/FIH/service/" + request.getApplicationName());
 			respObj.put("logURL", buildURL + "consoleText");
 
 			rootObj.put("response", respObj);
@@ -143,7 +151,8 @@ public class DAASAPI {
 			// InputStream is = new
 			// ByteArrayInputStream(generateInput(request).getBytes());
 
-			HttpPost httpPost = new HttpPost("http://jenkins-06hw6.10.135.4.49.xip.io/job/DAASBuild_withStrParams/buildWithParameters");
+			HttpPost httpPost = new HttpPost(
+					"http://jenkins-06hw6.10.135.4.49.xip.io/job/DAASBuild_withStrParams/buildWithParameters");
 
 			/*
 			 * HttpEntity entity = MultipartEntityBuilder.create()
@@ -155,7 +164,7 @@ public class DAASAPI {
 			 * 
 			 * httpPost.setEntity(entity);
 			 */
-			Map<String,String> dbCon= generateInput(request);
+			Map<String, String> dbCon = generateInput(request);
 
 			List<NameValuePair> params = new ArrayList<NameValuePair>();
 			params.add(new BasicNameValuePair("organization", request.getOrganization()));
@@ -164,7 +173,7 @@ public class DAASAPI {
 			params.add(new BasicNameValuePair("appHostName", request.getApplicationName().toLowerCase()));
 			params.add(new BasicNameValuePair("query", request.getQuery()));
 			params.add(new BasicNameValuePair("ConnectionString", dbCon.get("connectionString")));
-			params.add(new BasicNameValuePair("driverClassName",dbCon.get("driver")));
+			params.add(new BasicNameValuePair("driverClassName", dbCon.get("driver")));
 			params.add(new BasicNameValuePair("dbuser", request.getDatabaseInfo().getUser()));
 			params.add(new BasicNameValuePair("password", request.getDatabaseInfo().getPassword()));
 			params.add(new BasicNameValuePair("maxActive", request.getConnectionAttr().getMaxActive()));
@@ -176,7 +185,7 @@ public class DAASAPI {
 			jenkinResp = httpclient.execute(httpPost);
 
 			if (jenkinResp.getStatusLine().getStatusCode() != 201) {
-				throw new RuntimeException("Failed to invoke the JenkinJob : HTTP error code : "
+				throw new Exception("Failed to invoke the JenkinJob : HTTP error code : "
 						+ jenkinResp.getStatusLine().getStatusCode());
 			}
 
@@ -250,9 +259,10 @@ public class DAASAPI {
 	private JSONObject getErrorJson(Exception ex) throws JSONException {
 		JSONObject rootObj = new JSONObject();
 		JSONObject respObj = new JSONObject();
-		rootObj.put("response", respObj);
+		
 		respObj.put("result", "failure");
 		respObj.put("ErrorDetails", ex.getMessage());
+		rootObj.put("response", respObj);
 
 		return rootObj;
 	}
