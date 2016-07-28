@@ -92,13 +92,13 @@ public class DAASAPI {
 		if (dbType.equals("oracle")) {
 			driverClass = "oracle.jdbc.driver.OracleDriver";
 			connectionString = "jdbc:oracle:thin:@" + request.getDatabaseInfo().getHostName() + ":"
-					+ request.getDatabaseInfo().getPort() + ":" + request.getDatabaseInfo().getDatabaseName();
+					+ request.getDatabaseInfo().getPort() + "/" + request.getDatabaseInfo().getDatabaseName();
 
 		} else if (dbType.equals("as400")) {
 			driverClass = "com.ibm.as400.access.AS400JDBCDriver";
 			connectionString = "jdbc:as400://" + request.getDatabaseInfo().getHostName() + ";databaseName="
 					+ request.getDatabaseInfo().getDatabaseName()
-					+ ";prompt=false;naming=system;libraries=uatdta,uatctl";
+					+ ";prompt=false;naming=system;libraries="+request.getDatabaseInfo().getSchema();
 
 		}
 
