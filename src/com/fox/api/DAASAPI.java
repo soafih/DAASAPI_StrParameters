@@ -64,7 +64,7 @@ public class DAASAPI {
 			}
 			respObj.put("app_ep", "https://" + request.getApplicationName().toLowerCase()
 					+ ".10.135.4.49.xip.io/FIH/service/" + request.getApplicationName());
-			respObj.put("logURL", buildURL + "consoleText");
+			respObj.put("logURL", buildURL);
 
 			rootObj.put("response", respObj);
 			result = rootObj.toString();
@@ -238,7 +238,7 @@ public class DAASAPI {
 					continue;
 				}
 
-				buildURL = executable.get("url").toString();
+				buildURL = executable.get("url").toString()+"consoleText";
 
 				break;
 			}
